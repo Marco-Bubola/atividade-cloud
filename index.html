@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PataFeliz — Pet Shop & Veterinária</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary:  #F97316;
+      --dark:     #1C1917;
+      --light:    #FFF7ED;
+      --text:     #1C1917;
+      --muted:    #78716C;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text); background: #fff; line-height: 1.6; }
+
+    /* NAVBAR */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--dark);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,.4);
+    }
+    .logo { display: flex; align-items: center; gap: .6rem; text-decoration: none; }
+    .logo-icon { width: 38px; height: 38px; background: var(--primary); border-radius: 50%; display: grid; place-items: center; font-size: 1.3rem; }
+    .logo-text { color: #fff; font-size: 1.25rem; font-weight: 800; }
+    .logo-text span { color: var(--primary); }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a { color: #ccc; text-decoration: none; font-size: .95rem; transition: color .2s; }
+    nav ul a:hover { color: var(--primary); }
+    .btn-nav { background: var(--primary); color: #fff; padding: .5rem 1.25rem; border-radius: 20px; font-weight: 700; text-decoration: none; font-size: .9rem; transition: opacity .2s; }
+    .btn-nav:hover { opacity: .85; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--dark) 0%, #3B1F0E 60%, #1C1917 100%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 7rem 2rem 4rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 60% 50%, rgba(249,115,22,.15) 0%, transparent 65%);
+    }
+    .hero-paw { font-size: 4rem; margin-bottom: 1rem; animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .hero-badge {
+      display: inline-block; background: rgba(249,115,22,.15); color: var(--primary);
+      border: 1px solid rgba(249,115,22,.4); padding: .35rem 1rem; border-radius: 20px;
+      font-size: .82rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 { font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 900; color: #fff; line-height: 1.15; max-width: 700px; margin: 0 auto 1.25rem; }
+    .hero h1 span { color: var(--primary); }
+    .hero p { font-size: 1.1rem; color: #bba; max-width: 520px; margin: 0 auto 2.5rem; }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--primary); color: #fff; padding: .85rem 2rem; border-radius: 30px; font-size: 1rem; font-weight: 700; text-decoration: none; transition: transform .2s, box-shadow .2s; box-shadow: 0 4px 20px rgba(249,115,22,.4); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(249,115,22,.6); }
+    .btn-outline { border: 2px solid rgba(255,255,255,.25); color: #fff; padding: .85rem 2rem; border-radius: 30px; font-size: 1rem; font-weight: 600; text-decoration: none; transition: border-color .2s, background .2s; }
+    .btn-outline:hover { border-color: var(--primary); background: rgba(249,115,22,.08); }
+    .hero-stats { display: flex; justify-content: center; gap: 1rem; margin-top: 3.5rem; flex-wrap: wrap; }
+    .stat-card { background: rgba(255,255,255,.07); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 1rem 1.5rem; text-align: center; min-width: 120px; }
+    .stat-card .num { font-size: 1.7rem; font-weight: 900; color: var(--primary); }
+    .stat-card .lbl { font-size: .75rem; color: #aaa; text-transform: uppercase; letter-spacing: .5px; }
+
+    /* SECTIONS */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-tag { text-transform: uppercase; font-size: .8rem; font-weight: 700; color: var(--primary); letter-spacing: 1.5px; margin-bottom: .4rem; }
+    .section-title { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; line-height: 1.2; margin-bottom: .8rem; }
+    .section-sub { color: var(--muted); max-width: 500px; }
+
+    /* SERVIÇOS */
+    #servicos { background: var(--light); }
+    .servicos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .servico-card { background: #fff; border-radius: 16px; padding: 2rem; border: 1px solid #FED7AA; transition: transform .2s, box-shadow .2s; text-align: center; }
+    .servico-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(249,115,22,.15); }
+    .servico-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .servico-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: .4rem; }
+    .servico-card p { color: var(--muted); font-size: .9rem; }
+
+    /* SOBRE */
+    #sobre { background: #fff; }
+    .sobre-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 2rem; }
+    .sobre-img { background: linear-gradient(135deg, var(--light), #FED7AA); border-radius: 20px; height: 320px; display: grid; place-items: center; font-size: 6rem; }
+    .sobre-text h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; }
+    .sobre-text p { color: var(--muted); margin-bottom: 1rem; }
+    .sobre-items { display: flex; flex-direction: column; gap: .6rem; margin-top: 1rem; }
+    .sobre-item { display: flex; align-items: center; gap: .5rem; font-size: .95rem; }
+    .sobre-item::before { content: '🐾'; font-size: 1rem; }
+
+    /* DEPOIMENTOS */
+    #depoimentos { background: var(--light); }
+    .depoimentos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .depoimento { background: #fff; border-radius: 14px; padding: 1.5rem; border: 1px solid #FED7AA; }
+    .depoimento-stars { color: var(--primary); font-size: 1rem; margin-bottom: .5rem; }
+    .depoimento p { font-size: .9rem; color: #444; font-style: italic; margin-bottom: 1rem; }
+    .depoimento-autor { display: flex; align-items: center; gap: .6rem; }
+    .avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #FB923C); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .9rem; }
+    .autor-nome { font-weight: 700; font-size: .9rem; }
+    .autor-pet { font-size: .8rem; color: var(--muted); }
+
+    /* PREÇOS */
+    #precos { background: #fff; }
+    .precos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 3rem; align-items: start; }
+    .plano { border-radius: 16px; padding: 2rem; border: 2px solid #E7E5E4; text-align: center; }
+    .plano.destaque { border-color: var(--primary); box-shadow: 0 8px 32px rgba(249,115,22,.15); position: relative; }
+    .plano-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; font-size: .72rem; font-weight: 800; padding: .25rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; }
+    .plano-icon { font-size: 2rem; margin-bottom: .5rem; }
+    .plano-nome { font-size: .8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+    .plano-price { font-size: 2.2rem; font-weight: 900; margin: .4rem 0; }
+    .plano-price span { font-size: .9rem; font-weight: 400; color: var(--muted); }
+    .plano ul { list-style: none; text-align: left; margin: 1rem 0 1.5rem; display: flex; flex-direction: column; gap: .5rem; }
+    .plano ul li { font-size: .88rem; display: flex; gap: .4rem; align-items: flex-start; }
+    .plano ul li::before { content: '✓'; color: var(--primary); font-weight: 800; flex-shrink: 0; }
+    .btn-plano { display: block; text-align: center; text-decoration: none; padding: .75rem; border-radius: 30px; font-weight: 700; background: var(--primary); color: #fff; transition: opacity .2s; }
+    .btn-plano.outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+    .btn-plano:hover { opacity: .85; }
+
+    /* CONTATO */
+    #contato { background: linear-gradient(135deg, var(--dark), #3B1F0E); color: #fff; text-align: center; }
+    #contato h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; margin-bottom: 1rem; }
+    #contato p { color: #bba; max-width: 460px; margin: 0 auto 2rem; }
+    .contato-info { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .contato-item { font-size: .95rem; color: #ddc; }
+
+    /* FOOTER */
+    footer { background: var(--dark); color: #78716C; text-align: center; padding: 1.5rem; font-size: .82rem; border-top: 1px solid rgba(255,255,255,.06); }
+    footer strong { color: var(--primary); }
+
+    @media (max-width: 640px) {
+      nav ul { display: none; }
+      .sobre-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a class="logo" href="#">
+      <div class="logo-icon">🐾</div>
+      <span class="logo-text">Pata<span>Feliz</span></span>
+    </a>
+    <ul>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#sobre">Sobre Nós</a></li>
+      <li><a href="#depoimentos">Clientes</a></li>
+      <li><a href="#precos">Planos</a></li>
+    </ul>
+    <a class="btn-nav" href="#contato">Agendar Agora</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="hero-paw">🐾</div>
+      <div class="hero-badge">☁ Hospedado no Amazon S3</div>
+      <h1>Seu Pet merece<br><span>o melhor cuidado</span></h1>
+      <p>Banho, tosa, consulta veterinária e muito amor. Agendamento online rápido e sem complicação.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#contato">📅 Agendar Consulta</a>
+        <a class="btn-outline" href="#servicos">Ver Serviços</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card"><div class="num">+1.200</div><div class="lbl">Pets Atendidos</div></div>
+        <div class="stat-card"><div class="num">8 anos</div><div class="lbl">De Experiência</div></div>
+        <div class="stat-card"><div class="num">4.9 ⭐</div><div class="lbl">Avaliação</div></div>
+        <div class="stat-card"><div class="num">6 dias</div><div class="lbl">Por Semana</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos">
+    <div class="container">
+      <p class="section-tag">O que fazemos</p>
+      <h2 class="section-title">Nossos Serviços</h2>
+      <p class="section-sub">Tudo que seu pet precisa em um só lugar, com carinho e profissionalismo.</p>
+      <div class="servicos-grid">
+        <div class="servico-card">
+          <div class="servico-icon">🛁</div>
+          <h3>Banho &amp; Tosa</h3>
+          <p>Banho especial com produtos dermatológicos, tosa higiênica e artística para todas as raças.</p>
+        </div>
+        <div class="servico-card">
+          <div class="servico-icon">🩺</div>
+          <h3>Consulta Veterinária</h3>
+          <p>Clínica geral, vacinação, vermifugação e check-up completo com veterinários experientes.</p>
+        </div>
+        <div class="servico-card">
+          <div class="servico-icon">🏠</div>
+          <h3>Hotel Pet</h3>
+          <p>Hospedagem com monitoramento 24h, alimentação especial e muito amor durante sua viagem.</p>
+        </div>
+        <div class="servico-card">
+          <div class="servico-icon">🎀</div>
+          <h3>Day Spa Pet</h3>
+          <p>Hidratação de pelagem, aromaterapia e acessórios para deixar seu pet lindo e perfumado.</p>
+        </div>
+        <div class="servico-card">
+          <div class="servico-icon">🚗</div>
+          <h3>Busca e Entrega</h3>
+          <p>Serviço de transporte seguro para buscar e entregar seu pet em casa. Conforto para todos.</p>
+        </div>
+        <div class="servico-card">
+          <div class="servico-icon">🛒</div>
+          <h3>Loja Pet</h3>
+          <p>Rações premium, brinquedos, acessórios e tudo que seu pet precisa para viver bem.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="container">
+      <div class="sobre-grid">
+        <div class="sobre-img">🐶</div>
+        <div class="sobre-text">
+          <p class="section-tag">Nossa História</p>
+          <h2>Amor por animais desde 2016</h2>
+          <p>A PataFeliz nasceu do sonho de oferecer atendimento de qualidade para pets com preços acessíveis. Começamos pequenos e hoje somos referência na cidade.</p>
+          <p>Nossa equipe é formada por veterinários graduados, tosadores certificados e amantes de animais que tratam cada pet como se fosse o próprio.</p>
+          <div class="sobre-items">
+            <div class="sobre-item">Equipe treinada e certificada</div>
+            <div class="sobre-item">Produtos dermatologicamente testados</div>
+            <div class="sobre-item">Ambiente limpo, seguro e climatizado</div>
+            <div class="sobre-item">Agendamento online 24 horas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section id="depoimentos">
+    <div class="container">
+      <p class="section-tag">Clientes felizes</p>
+      <h2 class="section-title">O que falam sobre nós</h2>
+      <p class="section-sub">Mais de 1.200 tutores confiam na PataFeliz para cuidar dos seus companheiros.</p>
+      <div class="depoimentos-grid">
+        <div class="depoimento">
+          <div class="depoimento-stars">★★★★★</div>
+          <p>"Minha Luluzinha sai de lá cheirosa e feliz toda vez! Atendimento impecável e equipe super carinhosa."</p>
+          <div class="depoimento-autor">
+            <div class="avatar">AM</div>
+            <div><div class="autor-nome">Ana M.</div><div class="autor-pet">Tutora da Luluzinha 🐩</div></div>
+          </div>
+        </div>
+        <div class="depoimento">
+          <div class="depoimento-stars">★★★★★</div>
+          <p>"Meu cachorro é difícil para tosa mas aqui ele fica tranquilo. Recomendo demais a todos os tutores!"</p>
+          <div class="depoimento-autor">
+            <div class="avatar">RC</div>
+            <div><div class="autor-nome">Ricardo C.</div><div class="autor-pet">Tutor do Thor 🐕</div></div>
+          </div>
+        </div>
+        <div class="depoimento">
+          <div class="depoimento-stars">★★★★★</div>
+          <p>"Deixei meu gato no hotel pet nas férias e ele foi tratado com muito carinho. Voltaria sempre!"</p>
+          <div class="depoimento-autor">
+            <div class="avatar">JS</div>
+            <div><div class="autor-nome">Juliana S.</div><div class="autor-pet">Tutora do Mingau 🐱</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREÇOS -->
+  <section id="precos">
+    <div class="container">
+      <p class="section-tag">Investimento</p>
+      <h2 class="section-title">Planos de Assinatura</h2>
+      <p class="section-sub">Assine um plano mensal e economize em todos os serviços para seu pet.</p>
+      <div class="precos-grid">
+        <div class="plano">
+          <div class="plano-icon">🐹</div>
+          <p class="plano-nome">Básico</p>
+          <p class="plano-price">R$89 <span>/ mês</span></p>
+          <ul>
+            <li>2 banhos por mês</li>
+            <li>1 tosa higiênica</li>
+            <li>10% de desconto na loja</li>
+            <li>Agendamento prioritário</li>
+          </ul>
+          <a href="#contato" class="btn-plano outline">Assinar</a>
+        </div>
+        <div class="plano destaque">
+          <span class="plano-badge">Mais Popular</span>
+          <div class="plano-icon">🐶</div>
+          <p class="plano-nome">Premium</p>
+          <p class="plano-price">R$179 <span>/ mês</span></p>
+          <ul>
+            <li>4 banhos por mês</li>
+            <li>2 tosas completas</li>
+            <li>1 consulta veterinária</li>
+            <li>20% de desconto na loja</li>
+            <li>Busca e entrega inclusa</li>
+          </ul>
+          <a href="#contato" class="btn-plano">Assinar Agora</a>
+        </div>
+        <div class="plano">
+          <div class="plano-icon">🐾</div>
+          <p class="plano-nome">VIP</p>
+          <p class="plano-price">R$299 <span>/ mês</span></p>
+          <ul>
+            <li>Banhos e tosas ilimitados</li>
+            <li>2 consultas veterinárias</li>
+            <li>Day Spa mensal incluso</li>
+            <li>30% de desconto na loja</li>
+            <li>1 diária no hotel pet grátis</li>
+          </ul>
+          <a href="#contato" class="btn-plano outline">Assinar</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato">
+    <div class="container">
+      <h2>Agende agora para seu Pet 🐾</h2>
+      <p>Entre em contato pelos nossos canais ou venha nos visitar. Seu pet vai adorar!</p>
+      <div class="contato-info">
+        <div class="contato-item">📍 Rua das Flores, 123 — Centro</div>
+        <div class="contato-item">📞 (11) 9 8765-4321</div>
+        <div class="contato-item">⏰ Seg–Sáb: 8h às 18h</div>
+        <div class="contato-item">📧 contato@patafeliz.com.br</div>
+      </div>
+      <a class="btn-primary" href="https://wa.me/5511987654321" target="_blank" rel="noopener">
+        💬 Agendar via WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    🐾 <strong>PataFeliz</strong> — Pet Shop &amp; Veterinária &nbsp;|&nbsp;
+    Hospedado no <strong>Amazon S3</strong> — Static Website Hosting &nbsp;|&nbsp;
+    Atividade Prática — Computação em Nuvem — 2026
+  </footer>
+
+</body>
+</html>
